@@ -7,7 +7,13 @@ $(document).ready(function() {
             return false
         }
         counter++;
-
+        if (counter == 1) {
+            let big_check = $('<input class="big-check" type="checkbox">');
+            $('.inputclass').prepend(big_check);
+        }
+        $('.big-check').click(function() {
+            $('.checkbox').trigger('click');
+        })
         let view_div = $('<div>');
         $('#tasks').append(view_div);
         view_div.addClass('next-inputs');
@@ -30,23 +36,30 @@ $(document).ready(function() {
         })
         $(check).click(function() {
             if ($(this).is(':checked')) {
-                // counter++;
                 $(this).closest('.next-inputs').find('label').css("text-decoration", "line-through");
                 $('.clearr-all').text("Clear all");
-                // if (counter == 0) {
-                //     $('.clearr-all').text("");
-                // }
+                let checked_count = parseInt($('.count').text()) - 1;
+                $('.count').text(`${checked_count} item left`);
+
+
+
+
             } else if ($('.checkbox:checked').length === 0) {
                 $('.clearr-all').text("");
-                console.log('sda');
+                let checked_count = parseInt($('.count').text()) + 1;
+                $('.count').text(checked_count);
                 $(this).closest('.next-inputs').find('label').css("text-decoration", "none");
 
             } else {
                 $(this).closest('.next-inputs').find('label').css("text-decoration", "none");
+                let checked_count = parseInt($('.count').text()) + 1;
+                $('.count').text(checked_count + 'item left');
             }
 
 
         });
+
+
 
 
         if (counter == 1) {
@@ -65,13 +78,36 @@ $(document).ready(function() {
             footer_mid_row.append(all);
             let active = $('<span class="active col-4"> Active </span>');
             footer_mid_row.append(active);
-            let copmleted = $('<span class="Completed col-4"> Completed</span>')
+            let copmleted = $('<span class="completed col-4"> Completed</span>')
             footer_mid_row.append(copmleted);
             let footer_right = $('<span class="clearr-all col-4"></span>')
             $('.ftr').append(footer_right);
 
         }
         $('.count').text(`${counter} item left`);
+
+        $('.active').click(function() {
+            $('.checkbox:checked').closest('.next-inputs').css('display', 'none');
+            let total = $('.next-inputs').length;
+            let checked_count = $('.checkbox:checked').length;
+            let active_count = total - checked_count;
+
+
+            $('.count').text(`${active_count} item left`);
+
+        })
+        $('.completed').click(function() {
+            $('.checkbox').closest('.next-inputs').css('display', 'none');
+            $('.checkbox:checked').closest('.next-inputs').css('display', 'flex');
+        })
+        $('.allcheck').click(function() {
+            $('.next-inputs').css('display', 'flex');
+        })
+        $('.clearr-all').click(function() {
+            $('.checkbox:checked').closest('.next-inputs').css('display', 'none');
+            $('.clearr-all').text('');
+        });
+
 
 
 
